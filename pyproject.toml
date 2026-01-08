@@ -3,12 +3,32 @@ requires = ["maturin>=1.3,<2.0"]
 build-backend = "maturin"
 
 [project]
-name = "video_reader-rs"
+name = "video-reader-rs-next"
+description = "A Python module for video decoding based on Rust's ffmpeg-next, optimized for ML use cases."
+readme = "README.md"
 requires-python = ">=3.9"
+authors = [
+    { name = "wizyoung", email = "happyyanghehe@gmail.com" },
+]
+keywords = ["video", "decoding", "ffmpeg", "machine-learning", "rust", "pyo3"]
 classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Programming Language :: Rust",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
 ]
 dynamic = ["version"]
 license = "MIT OR GPL-2.0 OR GPL-3.0"
@@ -19,7 +39,13 @@ license-files = [
     "license_notes.md",
 ]
 
+[project.urls]
+Homepage = "https://github.com/wizyoung/video-reader-rs-next"
+Repository = "https://github.com/wizyoung/video-reader-rs-next.git"
+Issues = "https://github.com/wizyoung/video-reader-rs-next/issues"
+
 [tool.maturin]
+module-name = "video_reader"
 features = ["pyo3/extension-module", "pyo3/abi3-py39"]
 
 [tool.ruff]

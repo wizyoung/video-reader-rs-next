@@ -38,7 +38,7 @@ This project is separated as a new repository `video-reader-rs-next` for continu
 ### Install via pip
 
 ```bash
-pip install video-reader-rs-next  # Not ready yet, stay tuned
+pip install video-reader-rs-next
 ```
 
 Supports Python >= 3.9 on Linux x86_64 and macOS (Apple Silicon).

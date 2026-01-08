@@ -1,6 +1,6 @@
 [package]
-name = "video_reader-rs"
-version = "0.3.0"
+name = "video-reader-rs-next"
+version = "1.0.0"
 edition = "2021"
 
 [lib]
