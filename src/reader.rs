@@ -289,14 +289,16 @@ impl VideoReader {
         }
 
         // Check for odd dimensions with formats that require even dimensions (like yuv420p)
-        // This is a common pitfall when using force_original_aspect_ratio without force_divisible_by
         if (width % 2 != 0 || height % 2 != 0) && has_user_filter {
-            warn!(
-                "Filter output has odd dimensions ({}x{}). YUV420P and similar formats require \
-                 even dimensions. Consider adding ':force_divisible_by=2' to your scale filter, \
-                 or use 'pad' to align to even dimensions. This may cause 'Invalid data' errors.",
+            log::error!(
+                "Filter output has odd dimensions ({}x{}). YUV420P format requires even dimensions. \
+                 Solutions: \
+                 1) Use scale='trunc(iw/4)*2':'trunc(ih/4)*2' to ensure even output, \
+                 2) Add ':force_divisible_by=2' when using force_original_aspect_ratio, \
+                 3) Use scale=iw/2:-2 (where -2 means auto-align to even).",
                 width, height
             );
+            return Err(ffmpeg::Error::InvalidData);
         }
 
         Ok(VideoDecoder::new(
