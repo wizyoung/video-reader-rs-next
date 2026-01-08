@@ -111,7 +111,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 
 # Install build tools
-pip install maturin
+pip install maturin patchelf
 
 # Clone
 git clone https://github.com/wizyoung/video-reader-rs-next
