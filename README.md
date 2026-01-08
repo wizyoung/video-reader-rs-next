@@ -103,6 +103,9 @@ sudo make install
 **Step 2: Build video-reader-rs-next**
 
 ```bash
+# Deps
+sudo apt install -y clang llvm build-essential libc6-dev pkg-config
+
 # Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
