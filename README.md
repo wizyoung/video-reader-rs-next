@@ -85,8 +85,11 @@ cd ffmpeg-8.0
 
 mkdir -p /opt/ffmpeg8
 ./configure --prefix=/opt/ffmpeg8 \
-  --enable-shared \
   --enable-gpl \
+  --enable-shared \
+  --enable-asm \
+  --enable-x86asm \
+  --enable-runtime-cpudetect \
   --enable-libx264 \
   --enable-libx265 \
   --enable-libvpx \
@@ -125,7 +128,8 @@ export FFMPEG_DIR=/opt/ffmpeg8
 
 # Build and install
 maturin build --release
-# maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12 python3.13
+# maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12 python3.13 python3.14
+# maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12 python3.13 python3.14 --compatibility manylinux_2_28
 pip install target/wheels/video_reader*.whl
 ```
 
