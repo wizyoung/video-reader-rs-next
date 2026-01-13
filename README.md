@@ -61,6 +61,8 @@ cd video-reader-rs-next
 # Build (use --interpreter to specify Python versions if needed)
 maturin build --release
 # maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12 python3.13
+# if you want pack deps into whl, use tool delocate (pip install delocate)
+# delocate-wheel -v -w dist/ target/wheels/*.whl
 
 # Install the wheel
 pip install target/wheels/video_reader*.whl

@@ -30,7 +30,7 @@ classifiers = [
     "Operating System :: MacOS",
     "Operating System :: POSIX :: Linux",
 ]
-version = "1.0.0.post2"
+version = "1.0.0.post3"
 license = "MIT OR GPL-2.0 OR GPL-3.0"
 license-files = [
     "LICENSE",
@@ -46,6 +46,7 @@ Issues = "https://github.com/wizyoung/video-reader-rs-next/issues"
 
 [tool.maturin]
 module-name = "video_reader"
+python-source = "python"
 features = ["pyo3/extension-module", "pyo3/abi3-py39"]
 
 [tool.ruff]
