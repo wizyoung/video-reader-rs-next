@@ -290,7 +290,7 @@ The auto mode (`with_fallback=None`) uses a **cost estimation model** that consi
 - **Sequential cost**: Total frames to decode from start to max requested index
 - **Codec complexity**: AV1/HEVC have higher seek overhead than H.264
 - **GOP structure**: Videos with dense keyframes have higher seek overhead
-- **Video anomalies**: Automatically forces sequential mode for videos with negative PTS/DTS, non-monotonic timestamps, etc.
+- **Video anomalies**: Automatically forces sequential mode for videos with missing/duplicate PTS/DTS, non-monotonic DTS, non-monotonic timestamps, etc.
 
 The estimation accuracy is around 75%, and wrong predictions typically don't incur significant performance penalties because the overhead is bounded.
 
