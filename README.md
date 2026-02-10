@@ -47,13 +47,13 @@ Supports Python >= 3.9 on Linux x86_64 and macOS (Apple Silicon).
 
 #### macOS (Apple Silicon)
 
-**NOTE** brew default ffmpeg8 does not include libfreetype which affects drawtext. Now I suggest build with ffmpeg@7
+**NOTE:** Homebrew's default ffmpeg (v8) does not include libfreetype, which affects the `drawtext` filter. Building with ffmpeg@7 is recommended instead.
 
-Build with ffmpeg@7:
+**Build with ffmpeg@7 (recommended):**
 
 ```bash
 # Install dependencies
-# ffmpeg@7 a keg only version
+# ffmpeg@7 is a keg-only formula
 brew install rust ffmpeg@7
 
 # Install build tools
@@ -63,7 +63,7 @@ pip install maturin
 git clone https://github.com/wizyoung/video-reader-rs-next
 cd video-reader-rs-next
 
-# Config ffmpeg7 deps path
+# Configure ffmpeg@7 dependency paths
 export PATH=/opt/homebrew/opt/ffmpeg@7/bin:$PATH
 export LD_LIBRARY_PATH=/opt/homebrew/opt/ffmpeg@7/lib:$LD_LIBRARY_PATH
 export PKG_CONFIG_PATH=/opt/homebrew/opt/ffmpeg@7/lib/pkgconfig:$PKG_CONFIG_PATH
@@ -72,15 +72,15 @@ export FFMPEG_DIR=/opt/homebrew/opt/ffmpeg@7
 # Build (use --interpreter to specify Python versions if needed)
 maturin build --release
 # maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12 python3.13
-# if you want pack deps into whl, use tool delocate (pip install delocate)
+# If you want to bundle dependencies into the wheel, use delocate (pip install delocate):
 # delocate-wheel -v -w dist/ target/wheels/*.whl
 
 # Install the wheel
-pip install target/wheels/video_reader*.whl
+pip install dist/video_reader*.whl
 
 ```
 
-Build with ffmpeg@8 (homebrew default)
+**Build with ffmpeg@8 (homebrew default):**
 ```bash
 # Install dependencies
 brew install rust ffmpeg
@@ -99,7 +99,7 @@ maturin build --release
 # delocate-wheel -v -w dist/ target/wheels/*.whl
 
 # Install the wheel
-pip install target/wheels/video_reader*.whl
+pip install dist/video_reader*.whl
 ```
 
 #### Debian/Ubuntu (with FFmpeg 8)
@@ -168,7 +168,7 @@ export FFMPEG_DIR=/opt/ffmpeg8
 maturin build --release
 # maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12 python3.13 python3.14
 # maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12 python3.13 python3.14 --compatibility manylinux_2_28
-pip install target/wheels/video_reader*.whl
+pip install dist/video_reader*.whl
 ```
 
 #### For FFmpeg <= 5

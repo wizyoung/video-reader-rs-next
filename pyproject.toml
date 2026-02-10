@@ -30,7 +30,7 @@ classifiers = [
     "Operating System :: MacOS",
     "Operating System :: POSIX :: Linux",
 ]
-version = "1.1.0"
+version = "1.1.0_post1"
 license = "MIT OR GPL-2.0 OR GPL-3.0"
 license-files = [
     "LICENSE",
