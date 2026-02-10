@@ -78,7 +78,8 @@ sudo apt-get install -y build-essential yasm nasm pkg-config \
     libx264-dev libx265-dev libvpx-dev libfdk-aac-dev libmp3lame-dev \
     libopus-dev libdav1d-dev libavformat-dev libavcodec-dev libavutil-dev \
     libswscale-dev libavfilter-dev libavdevice-dev \
-    libfreetype6-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev
+    libfreetype6-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev \
+    libgnutls28-dev
 
 # Download and build FFmpeg 8
 wget https://ffmpeg.org/releases/ffmpeg-8.0.tar.xz
@@ -92,6 +93,7 @@ mkdir -p /opt/ffmpeg8
   --enable-asm \
   --enable-x86asm \
   --enable-runtime-cpudetect \
+  --enable-gnutls \
   --enable-libx264 \
   --enable-libx265 \
   --enable-libvpx \
@@ -225,6 +227,7 @@ pprint(info)
 #  'width': '720'}
 
 fps = vr.get_fps()        # 30.0
+fps = vr.get_avg_fps()    # 30.0 (alias for get_fps, Decord-compatible API)
 n, h, w = vr.get_shape()  # [449, 1280, 720]
 print(len(vr))            # 449
 
@@ -630,4 +633,3 @@ Run benchmarks locally: `python scripts/benchmark_speed_memory.py`
 - [ffmpeg-next](https://github.com/zmwangx/rust-ffmpeg) - Rust FFmpeg bindings
 - [video-rs](https://github.com/oddity-ai/video-rs) - High-level API design and ndarray conversion
 - [video_reader-rs](https://github.com/gcanat/video_reader-rs) - Original project this fork is based on
-

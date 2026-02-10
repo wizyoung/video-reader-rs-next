@@ -110,6 +110,17 @@ class PyVideoReader:
         """
         ...
 
+    def get_avg_fps(self) -> float:
+        """
+        Alias for get_fps(). Get the average frame rate of the video.
+
+        Returns
+        -------
+        float
+            Average frames per second.
+        """
+        ...
+
     def get_shape(self) -> list[int]:
         """
         Get the shape of the video.

@@ -356,6 +356,11 @@ impl PyVideoReader {
         }
     }
 
+    /// Alias for get_fps(). Returns the average fps of the video as float.
+    fn get_avg_fps<'a>(&'a self, py: Python<'a>) -> PyResult<Bound<'a, PyFloat>> {
+        self.get_fps(py)
+    }
+
     /// Get shape of the video: [number of frames, height and width]
     fn get_shape<'a>(&'a self, py: Python<'a>) -> PyResult<Bound<'a, PyList>> {
         match self.inner.lock() {
