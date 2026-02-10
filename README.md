@@ -47,6 +47,40 @@ Supports Python >= 3.9 on Linux x86_64 and macOS (Apple Silicon).
 
 #### macOS (Apple Silicon)
 
+**NOTE** brew default ffmpeg8 does not include libfreetype which affects drawtext. Now I suggest build with ffmpeg@7
+
+Build with ffmpeg@7:
+
+```bash
+# Install dependencies
+# ffmpeg@7 a keg only version
+brew install rust ffmpeg@7
+
+# Install build tools
+pip install maturin
+
+# Clone and build
+git clone https://github.com/wizyoung/video-reader-rs-next
+cd video-reader-rs-next
+
+# Config ffmpeg7 deps path
+export PATH=/opt/homebrew/opt/ffmpeg@7/bin:$PATH
+export LD_LIBRARY_PATH=/opt/homebrew/opt/ffmpeg@7/lib:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=/opt/homebrew/opt/ffmpeg@7/lib/pkgconfig:$PKG_CONFIG_PATH
+export FFMPEG_DIR=/opt/homebrew/opt/ffmpeg@7
+
+# Build (use --interpreter to specify Python versions if needed)
+maturin build --release
+# maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12 python3.13
+# if you want pack deps into whl, use tool delocate (pip install delocate)
+# delocate-wheel -v -w dist/ target/wheels/*.whl
+
+# Install the wheel
+pip install target/wheels/video_reader*.whl
+
+```
+
+Build with ffmpeg@8 (homebrew default)
 ```bash
 # Install dependencies
 brew install rust ffmpeg
