@@ -168,7 +168,7 @@ export FFMPEG_DIR=/opt/ffmpeg8
 maturin build --release
 # maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12 python3.13 python3.14
 # maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12 python3.13 python3.14 --compatibility manylinux_2_28
-pip install dist/video_reader*.whl
+pip install target/wheels/video_reader*.whl
 ```
 
 #### For FFmpeg <= 5
