@@ -21,7 +21,7 @@ use pyo3::{
     types::{
         IntoPyDict, PyAnyMethods, PyDict, PyFloat, PyList, PyModule, PyModuleMethods, PySlice,
     },
-    Bound, FromPyObject, PyRef, PyRefMut, PyResult, Python,
+    Bound, FromPyObject, PyRef, PyResult, Python,
 };
 use reader::VideoReader;
 use std::str::FromStr;
@@ -207,38 +207,32 @@ impl PyVideoReader {
     fn __iter__(slf: PyRef<'_, Self>) -> PyRef<'_, Self> {
         slf
     }
-    fn __next__<'a>(
-        slf: PyRefMut<'_, Self>,
-        py: Python<'a>,
-    ) -> Option<Bound<'a, PyArray<u8, Dim<[usize; 3]>>>> {
-        match slf.inner.lock() {
-            Ok(mut vr) => vr.next().map(|rgb_frame| rgb_frame.into_pyarray(py)),
+    fn __next__<'a>(&self, py: Python<'a>) -> Option<Bound<'a, PyArray<u8, Dim<[usize; 3]>>>> {
+        let result = py.detach(|| match self.inner.lock() {
+            Ok(mut vr) => vr.next(),
             Err(e) => {
                 debug!("Lock error in __next__: {e}");
                 None
             }
-        }
+        });
+        result.map(|rgb_frame| rgb_frame.into_pyarray(py))
     }
 
     fn __getitem__<'a>(&self, py: Python<'a>, key: IntOrSlice) -> PyResult<Bound<'a, FrameOrVid>> {
         let frame_count = match self.inner.lock() {
-            Ok(vr) => Ok(*vr.stream_info().frame_count()),
-            Err(e) => Err(e),
+            Ok(vr) => *vr.stream_info().frame_count(),
+            Err(e) => return Err(PyRuntimeError::new_err(format!("Lock error: {e}"))),
         };
-        if let Ok(frame_cnt) = frame_count {
-            let index = key.to_indices(frame_cnt)?;
-            let index_clone = index.clone();
-            // For single frame access (reader[i]), always use seek-based method
-            // This enables skip-forward optimization for sequential access patterns
-            // like: for i in range(n): reader[i]
-            let is_single_frame = matches!(key, IntOrSlice::Int { .. });
+        let index = key.to_indices(frame_count)?;
+        let index_clone = index.clone();
+        // For single frame access (reader[i]), always use seek-based method
+        // This enables skip-forward optimization for sequential access patterns
+        // like: for i in range(n): reader[i]
+        let is_single_frame = matches!(key, IntOrSlice::Int { .. });
 
-            let result = py.detach(|| {
-
+        let result = py.detach(|| {
             match self.inner.lock() {
                 Ok(mut vr) => {
-
-
                     // For slices/lists, use the cost estimation logic
                     let force_sequential = vr.needs_sequential_mode();
                     let use_sequential = if is_single_frame {
@@ -263,16 +257,17 @@ impl PyVideoReader {
                                 vr.get_batch_safe(index.clone())
                             }
                         }
-                    }.map_err(|e| {
+                    }
+                    .map_err(|e| {
                         // Convert Bug error to a more meaningful message
                         let failed = vr.failed_indices();
                         let msg = match e {
                             ffmpeg::Error::Bug => {
                                 format!(
                                     "Failed to decode frame(s) at index {:?} (requested {:?}, frame_count={})",
-                                    failed, index_clone, frame_cnt
+                                    failed, index_clone, frame_count
                                 )
-                            },
+                            }
                             _ => format!("{e}"),
                         };
                         PyRuntimeError::new_err(format!("Error: {msg}"))
@@ -287,19 +282,14 @@ impl PyVideoReader {
                     } else {
                         Ok(res_array.into_dyn())
                     }
-                },
+                }
                 Err(e) => Err(PyRuntimeError::new_err(format!("Lock error: {e}"))),
             }
-            });
+        });
 
-            match result {
-                Ok(array) => Ok(array.into_pyarray(py)),
-                Err(e) => Err(e),
-            }
-        } else {
-            Err(PyRuntimeError::new_err(
-                "Could not find frame count".to_string(),
-            ))
+        match result {
+            Ok(array) => Ok(array.into_pyarray(py)),
+            Err(e) => Err(e),
         }
     }
 
